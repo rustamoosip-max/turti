@@ -1,0 +1,481 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>URBAWILD — премиальный макет (мобильный)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{ box-sizing:border-box; margin:0; padding:0; }
+  :root{
+    --milk:#F6F1E7;        /* молочный фон */
+    --paper:#FFFFFF;        /* карточки */
+    --green:#1E3B2C;        /* глубокий тёмно-зелёный */
+    --green2:#2C5240;
+    --nut:#B98A5E;          /* тёплый ореховый */
+    --gold:#C7A24B;         /* умеренный золотой акцент */
+    --ink:#20261F;          /* основной текст */
+    --muted:#6E6A5F;        /* второстепенный текст */
+    --line:#E9E2D3;         /* тонкие линии */
+    --shadow:0 14px 34px rgba(31,45,33,.10);
+  }
+  body{
+    font-family:'Manrope',sans-serif; color:var(--ink);
+    background:#ECE6D8;
+    -webkit-font-smoothing:antialiased; line-height:1.5;
+    display:flex; flex-direction:column; align-items:center; padding:24px 12px 60px;
+  }
+  h1,h2,h3,.logo-txt{ font-family:'Cormorant Garamond',serif; font-weight:600; }
+
+  /* ─── ТЕЛЕФОН 390px ─── */
+  .phone{
+    width:390px; max-width:100%; background:var(--milk);
+    border-radius:34px; overflow:hidden; position:relative;
+    box-shadow:0 30px 70px rgba(20,30,20,.28); min-height:844px;
+  }
+  .screen{ display:none; padding-bottom:86px; }
+  .screen.active{ display:block; }
+
+  /* ─── ШАПКА ─── */
+  .hdr{
+    position:sticky; top:0; z-index:20;
+    display:flex; align-items:center; justify-content:space-between;
+    padding:12px 16px; background:rgba(246,241,231,.82);
+    -webkit-backdrop-filter:blur(16px); backdrop-filter:blur(16px);
+    border-bottom:1px solid var(--line);
+  }
+  .hdr .ic{ width:40px; height:40px; border-radius:12px; border:1px solid var(--line);
+    background:var(--paper); display:grid; place-items:center; color:var(--green); cursor:pointer; }
+  .hdr .ic svg{ width:20px; height:20px; }
+  .logo{ display:flex; flex-direction:column; align-items:center; line-height:1; }
+  .logo .logo-txt{ font-size:23px; letter-spacing:.04em; color:var(--green); }
+  .logo small{ font-size:8.5px; letter-spacing:.26em; text-transform:uppercase; color:var(--nut); font-weight:700; margin-top:2px; }
+  .cart-ic{ position:relative; }
+  .badge{ position:absolute; top:-6px; right:-6px; min-width:18px; height:18px; padding:0 4px;
+    background:var(--green); color:#fff; font-size:10px; font-weight:800; border-radius:999px;
+    display:grid; place-items:center; font-family:'Manrope',sans-serif; }
+
+  /* ─── КНОПКИ ─── */
+  .btn{ display:inline-flex; align-items:center; justify-content:center; gap:8px;
+    min-height:52px; padding:14px 26px; border:none; border-radius:16px; cursor:pointer;
+    font:800 15px 'Manrope',sans-serif; letter-spacing:.01em; text-decoration:none;
+    transition:transform .15s, filter .15s; }
+  .btn:active{ transform:scale(.98); }
+  .btn-green{ background:var(--green); color:#F6F1E7; box-shadow:0 10px 24px rgba(30,59,44,.28); }
+  .btn-green:hover{ filter:brightness(1.08); }
+  .btn-out{ background:transparent; color:var(--green); border:1.5px solid var(--green); }
+  .btn-sm{ min-height:44px; padding:10px 16px; font-size:13.5px; border-radius:13px; }
+  .btn-block{ width:100%; }
+
+  /* ─── HERO ─── */
+  .hero{ position:relative; height:520px; overflow:hidden; display:flex; align-items:flex-end; }
+  .hero img{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
+  .hero .fallback{ position:absolute; inset:0; background:linear-gradient(160deg,#3C6B4E,#1E3B2C 60%,#132619); }
+  .hero .shade{ position:absolute; inset:0;
+    background:linear-gradient(to top, rgba(12,22,15,.9) 6%, rgba(12,22,15,.4) 48%, rgba(12,22,15,.08)); }
+  .hero-in{ position:relative; z-index:2; padding:0 20px 26px; width:100%; }
+  .hero h1{ color:#FBF7EE; font-size:40px; line-height:1.04; letter-spacing:.005em; margin-bottom:10px;
+    text-shadow:0 4px 22px rgba(0,0,0,.4); }
+  .hero p{ color:rgba(251,247,238,.92); font-size:15px; font-weight:500; margin-bottom:18px; max-width:300px; }
+  .hero .trust{ display:inline-flex; align-items:center; gap:8px; margin-top:14px;
+    background:rgba(255,255,255,.14); border:1px solid rgba(255,255,255,.25);
+    color:#FBF7EE; font-size:11.5px; font-weight:700; padding:8px 13px; border-radius:999px;
+    -webkit-backdrop-filter:blur(6px); backdrop-filter:blur(6px); }
+
+  /* ─── СЕКЦИИ ─── */
+  .sec{ padding:30px 16px 6px; }
+  .sec-h{ display:flex; align-items:baseline; justify-content:space-between; margin-bottom:14px; }
+  .sec-h h2{ font-size:27px; color:var(--green); letter-spacing:.01em; }
+  .sec-h .eyebrow{ display:block; font:700 11px 'Manrope',sans-serif; letter-spacing:.18em;
+    text-transform:uppercase; color:var(--nut); margin-bottom:3px; }
+  .sec-h a{ font:700 13px 'Manrope',sans-serif; color:var(--green); text-decoration:none; white-space:nowrap; }
+
+  /* банка (продукт в центре) */
+  .jar{ position:relative; width:76px; height:104px; border-radius:9px 9px 13px 13px; flex-shrink:0;
+    box-shadow:inset 0 -14px 24px rgba(0,0,0,.18), 0 8px 16px rgba(30,40,25,.16); }
+  .jar::before{ content:""; position:absolute; top:-7px; left:50%; transform:translateX(-50%);
+    width:64%; height:11px; background:#2A2118; border-radius:4px 4px 3px 3px; }
+  .jar::after{ content:""; position:absolute; top:26%; left:12%; right:12%; bottom:16%;
+    background:rgba(252,249,242,.94); border-radius:7px; }
+  .jar span{ position:absolute; z-index:2; left:0; right:0; top:40%; text-align:center;
+    font:800 9px 'Manrope',sans-serif; letter-spacing:.06em; color:#2A2118; padding:0 6px; line-height:1.2; }
+
+  /* НАБОР «Первое знакомство» */
+  .bundle{ background:var(--paper); border:1px solid var(--line); border-radius:24px; overflow:hidden; box-shadow:var(--shadow); }
+  .bundle-top{ position:relative; background:linear-gradient(150deg,#EFE7D5,#E4D6BC);
+    padding:26px 18px 20px; display:flex; align-items:flex-end; justify-content:center; gap:8px; }
+  .bundle-top .jar{ width:66px; height:92px; }
+  .bundle-top .jar:nth-child(2){ transform:translateY(-10px); z-index:2; }
+  .tag{ position:absolute; top:12px; left:14px; background:var(--green); color:#F6F1E7;
+    font:800 11px 'Manrope',sans-serif; padding:6px 11px; border-radius:999px; }
+  .bundle-b{ padding:18px; }
+  .bundle-b h3{ font-size:24px; color:var(--green); margin-bottom:4px; }
+  .bundle-b .fl{ color:var(--muted); font-size:13.5px; font-weight:500; margin-bottom:12px; }
+  .price-row{ display:flex; align-items:baseline; gap:10px; margin-bottom:14px; }
+  .price{ font:800 26px 'Manrope',sans-serif; color:var(--green); letter-spacing:-.02em; }
+  .price-old{ color:#B3AB97; text-decoration:line-through; font-size:15px; font-weight:600; }
+  .price-save{ background:#EAF1EA; color:var(--green2); font:800 11px 'Manrope',sans-serif;
+    padding:4px 10px; border-radius:999px; }
+
+  /* горизонтальные хиты */
+  .hscroll{ display:flex; gap:12px; overflow-x:auto; padding:2px 16px 14px; scroll-snap-type:x mandatory; }
+  .hscroll::-webkit-scrollbar{ display:none; }
+  .hcard{ scroll-snap-align:start; flex:0 0 156px; }
+
+  /* карточка товара */
+  .pcard{ background:var(--paper); border:1px solid var(--line); border-radius:20px; overflow:hidden;
+    box-shadow:0 8px 20px rgba(31,45,33,.07); display:flex; flex-direction:column; }
+  .pcard .art{ position:relative; height:150px; display:flex; align-items:flex-end; justify-content:center;
+    padding-bottom:16px; background:radial-gradient(120% 90% at 50% 20%, #FBF7EE, #F1EAD9); cursor:pointer; }
+  .pcard .art::after{ content:""; position:absolute; bottom:12px; left:26%; right:26%; height:11px;
+    border-radius:50%; background:rgba(0,0,0,.14); filter:blur(6px); }
+  .pcard .art .jar{ width:64px; height:88px; z-index:2; }
+  .pcard .b{ padding:12px 13px 13px; display:flex; flex-direction:column; gap:2px; flex:1; }
+  .pcard .b h3{ font-family:'Manrope',sans-serif; font-weight:800; font-size:14.5px; color:var(--ink); line-height:1.25; }
+  .pcard .b .w{ font-size:11.5px; color:var(--muted); font-weight:600; }
+  .pcard .b .pr{ font:800 17px 'Manrope',sans-serif; color:var(--green); letter-spacing:-.02em; margin-top:4px; }
+  .pcard .add{ margin-top:10px; }
+  .grid2{ display:grid; grid-template-columns:1fr 1fr; gap:12px; padding:0 16px; }
+
+  /* блок мельницы */
+  .mill{ margin:30px 16px 6px; border-radius:24px; overflow:hidden; position:relative; min-height:300px;
+    display:flex; align-items:flex-end; box-shadow:var(--shadow); }
+  .mill img{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
+  .mill .fallback{ position:absolute; inset:0; background:linear-gradient(160deg,#5A3A1E,#241608); }
+  .mill .shade{ position:absolute; inset:0; background:linear-gradient(to top, rgba(15,25,15,.92) 8%, rgba(15,25,15,.35) 60%); }
+  .mill-in{ position:relative; z-index:2; padding:22px 20px 22px; }
+  .mill-in .eyebrow{ display:block; font:700 11px 'Manrope',sans-serif; letter-spacing:.2em;
+    text-transform:uppercase; color:var(--gold); margin-bottom:8px; }
+  .mill-in h2{ color:#FBF7EE; font-size:28px; line-height:1.1; margin-bottom:8px; }
+  .mill-in p{ color:rgba(251,247,238,.9); font-size:14px; font-weight:500; margin-bottom:16px; max-width:290px; }
+  .btn-cream{ background:#F6F1E7; color:var(--green); }
+
+  /* отзывы */
+  .review{ background:var(--paper); border:1px solid var(--line); border-radius:18px; padding:16px; margin-bottom:12px; box-shadow:0 6px 16px rgba(31,45,33,.05); }
+  .review .top{ display:flex; align-items:center; gap:10px; margin-bottom:8px; }
+  .ava{ width:38px; height:38px; border-radius:50%; background:var(--green); color:#F6F1E7;
+    display:grid; place-items:center; font:800 15px 'Manrope',sans-serif; }
+  .review .top b{ font-size:14px; }
+  .stars{ color:var(--gold); font-size:12px; letter-spacing:2px; }
+  .review p{ font-size:13.5px; color:#4A473E; font-weight:500; line-height:1.55; }
+
+  /* доставка/оплата */
+  .info{ background:var(--paper); border:1px solid var(--line); border-radius:18px; padding:16px 16px 6px; }
+  .info .row{ display:flex; gap:12px; padding:10px 0; border-top:1px solid var(--line); }
+  .info .row:first-child{ border-top:none; }
+  .info .row .i{ font-size:20px; }
+  .info .row b{ font-size:14px; display:block; }
+  .info .row span{ font-size:12.5px; color:var(--muted); }
+
+  /* подвал */
+  .foot{ background:var(--green); color:rgba(246,241,231,.85); padding:28px 20px 26px; margin-top:30px; }
+  .foot .logo-txt{ color:#F6F1E7; font-size:24px; }
+  .foot .links{ display:flex; flex-wrap:wrap; gap:10px; margin:14px 0; }
+  .foot .links a{ background:rgba(246,241,231,.12); color:#F6F1E7; text-decoration:none;
+    font:700 12.5px 'Manrope',sans-serif; padding:9px 14px; border-radius:999px; }
+  .foot .sm{ font-size:11.5px; color:rgba(246,241,231,.6); line-height:1.7; }
+
+  /* нижняя навигация */
+  .nav{ position:absolute; left:0; right:0; bottom:0; z-index:30; height:72px;
+    background:rgba(246,241,231,.92); -webkit-backdrop-filter:blur(18px); backdrop-filter:blur(18px);
+    border-top:1px solid var(--line); display:flex; }
+  .nav button{ flex:1; background:none; border:none; cursor:pointer; display:grid; justify-items:center; gap:3px;
+    font:800 10.5px 'Manrope',sans-serif; color:#9A9484; }
+  .nav button svg{ width:24px; height:24px; }
+  .nav button.on{ color:var(--green); }
+
+  /* карточка товара (детальная) */
+  .pd{ padding:0 0 20px; }
+  .pd .art{ height:300px; background:radial-gradient(120% 80% at 50% 25%, #FBF7EE, #EEE5D2);
+    display:flex; align-items:flex-end; justify-content:center; padding-bottom:26px; position:relative; }
+  .pd .art .jar{ width:120px; height:164px; }
+  .pd .art .back{ position:absolute; top:14px; left:14px; width:40px; height:40px; border-radius:12px;
+    background:rgba(255,255,255,.85); border:1px solid var(--line); display:grid; place-items:center; cursor:pointer; }
+  .pd-b{ padding:20px 18px; }
+  .pd-b h2{ font-size:30px; color:var(--green); margin-bottom:4px; }
+  .pd-b .w{ color:var(--muted); font-weight:600; font-size:14px; margin-bottom:14px; }
+  .sizes{ display:flex; gap:8px; margin-bottom:16px; }
+  .size{ flex:1; border:1.5px solid var(--line); background:var(--paper); border-radius:14px; padding:10px 6px;
+    text-align:center; cursor:pointer; }
+  .size.on{ border-color:var(--green); background:#EAF1EA; }
+  .size b{ display:block; font:800 14px 'Manrope',sans-serif; }
+  .size span{ font-size:12px; color:var(--muted); }
+  .pd-price{ font:800 30px 'Manrope',sans-serif; color:var(--green); letter-spacing:-.02em; margin:6px 0 16px; }
+  .block{ background:var(--paper); border:1px solid var(--line); border-radius:16px; padding:14px 16px; margin-bottom:10px; }
+  .block h4{ font:800 11px 'Manrope',sans-serif; letter-spacing:.14em; text-transform:uppercase; color:var(--nut); margin-bottom:6px; }
+  .block p{ font-size:14px; color:#4A473E; font-weight:500; }
+
+  .empty{ text-align:center; color:var(--muted); padding:60px 20px; }
+  .empty .big{ font-size:40px; margin-bottom:10px; }
+
+  /* ─── ДИЗАЙН-СИСТЕМА ─── */
+  .ds{ width:390px; max-width:100%; margin-top:22px; background:var(--paper); border-radius:20px;
+    padding:20px; box-shadow:0 14px 34px rgba(20,30,20,.12); }
+  .ds h3{ font-family:'Cormorant Garamond',serif; font-size:24px; color:var(--green); margin-bottom:4px; }
+  .ds .lead{ font-size:12.5px; color:var(--muted); margin-bottom:16px; }
+  .sw{ display:flex; gap:8px; flex-wrap:wrap; margin-bottom:16px; }
+  .sw div{ flex:1; min-width:64px; border-radius:12px; padding:10px 8px; font:700 10px 'Manrope',sans-serif;
+    border:1px solid var(--line); }
+  .ds table{ width:100%; border-collapse:collapse; font-size:12.5px; }
+  .ds td{ padding:7px 0; border-top:1px solid var(--line); vertical-align:top; }
+  .ds td:first-child{ font-weight:800; color:var(--green); width:120px; }
+  .capt{ width:390px; max-width:100%; text-align:center; color:#6a6456; font-size:12px; margin:4px 0 14px; }
+</style>
+</head>
+<body>
+
+<div class="capt">URBAWILD · мобильный макет 390px — переключай экраны внизу</div>
+
+<div class="phone">
+
+  <!-- ШАПКА -->
+  <header class="hdr">
+    <button class="ic" aria-label="Меню">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+    </button>
+    <div class="logo"><span class="logo-txt">UrbaWild</span><small>урбеч с водяной мельницы</small></div>
+    <button class="ic cart-ic" data-go="cart" aria-label="Корзина">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8h12l-1 11a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg>
+      <span class="badge" id="badge">0</span>
+    </button>
+  </header>
+
+  <!-- ЭКРАН: ГЛАВНАЯ -->
+  <div class="screen active" id="view-home">
+    <!-- HERO -->
+    <section class="hero">
+      <div class="fallback"></div>
+      <img src="images/hero.jpg" alt="Банки урбеча UrbaWild" onerror="this.style.display='none'">
+      <div class="shade"></div>
+      <div class="hero-in">
+        <h1>Настоящий урбеч<br>с водяной мельницы</h1>
+        <p>Медленный каменный помол в горах Дагестана</p>
+        <a class="btn btn-green" data-go="catalog">Выбрать вкус</a>
+        <div><span class="trust">✓ Без перегрева • Только натуральные ингредиенты</span></div>
+      </div>
+    </section>
+
+    <!-- ПЕРВОЕ ЗНАКОМСТВО -->
+    <section class="sec">
+      <div class="sec-h"><div><span class="eyebrow">С чего начать</span><h2>Первое знакомство</h2></div></div>
+      <div class="bundle">
+        <div class="bundle-top">
+          <span class="tag">Выгода 137 ₽</span>
+          <div class="jar" style="background:#B87A3D"><span>АРАХИС</span></div>
+          <div class="jar" style="background:#DDB97C"><span>МИНДАЛЬ</span></div>
+          <div class="jar" style="background:#4A2810"><span style="color:#F6EBDA">ФУНДУК КАКАО</span></div>
+        </div>
+        <div class="bundle-b">
+          <h3>Набор из трёх вкусов</h3>
+          <div class="fl">Арахисовый · Миндальный · Фундук какао-бобы — по 250 г</div>
+          <div class="price-row">
+            <span class="price">1 490 ₽</span>
+            <span class="price-old">1 627 ₽</span>
+            <span class="price-save">выгода 137 ₽</span>
+          </div>
+          <button class="btn btn-green btn-block" data-add="Набор «Первое знакомство»|1490">Попробовать набор</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ХИТЫ -->
+    <section class="sec">
+      <div class="sec-h"><div><span class="eyebrow">Выбор покупателей</span><h2>Хиты продаж</h2></div><a data-go="catalog">Все →</a></div>
+    </section>
+    <div class="hscroll" id="hits"></div>
+
+    <!-- ВСЕ УРБЕЧИ (превью) -->
+    <section class="sec">
+      <div class="sec-h"><div><span class="eyebrow">16 вкусов</span><h2>Все урбечи</h2></div><a data-go="catalog">Каталог →</a></div>
+    </section>
+    <div class="grid2" id="home-grid"></div>
+
+    <!-- МЕЛЬНИЦА -->
+    <div class="mill">
+      <div class="fallback"></div>
+      <img src="images/about-hero.jpg" alt="Водяная мельница" onerror="this.style.display='none'">
+      <div class="shade"></div>
+      <div class="mill-in">
+        <span class="eyebrow">Наша история</span>
+        <h2>Медленный каменный помол</h2>
+        <p>Орех перетирают каменные жернова водяной мельницы. Без перегрева — вкус и аромат остаются живыми.</p>
+        <a class="btn btn-cream" href="about.html">Узнать нашу историю</a>
+      </div>
+    </div>
+
+    <!-- ОТЗЫВЫ -->
+    <section class="sec">
+      <div class="sec-h"><div><span class="eyebrow">Что говорят</span><h2>Отзывы</h2></div></div>
+      <div class="review"><div class="top"><div class="ava">М</div><div><b>Мадина</b><div class="stars">★★★★★</div></div></div><p>Заказываю третий раз. Вкус как в детстве у бабушки. Ребёнок ест с удовольствием!</p></div>
+      <div class="review"><div class="top"><div class="ava">А</div><div><b>Артём</b><div class="stars">★★★★★</div></div></div><p>Честный состав — один орех. Проверил лично. Беру килограммовую банку.</p></div>
+      <div class="review"><div class="top"><div class="ava">О</div><div><b>Ольга</b><div class="stars">★★★★★</div></div></div><p>Добавляю в кашу каждое утро. Качество отличное, доставка быстрая.</p></div>
+    </section>
+
+    <!-- ДОСТАВКА И ОПЛАТА -->
+    <section class="sec">
+      <div class="sec-h"><div><span class="eyebrow">Как получить</span><h2>Доставка и оплата</h2></div></div>
+      <div class="info">
+        <div class="row"><span class="i">📦</span><div><b>Доставка по всей России</b><span>Ozon и СДЭК до пункта выдачи или курьером</span></div></div>
+        <div class="row"><span class="i">💳</span><div><b>Оплата картой или СБП</b><span>Безопасная оплата онлайн при оформлении</span></div></div>
+        <div class="row"><span class="i">🕒</span><div><b>Отправка 1–2 дня</b><span>Собираем и передаём в доставку быстро</span></div></div>
+      </div>
+    </section>
+
+    <!-- ПОДВАЛ -->
+    <footer class="foot">
+      <div class="logo"><span class="logo-txt">UrbaWild</span></div>
+      <p style="margin-top:8px;font-size:13px">Натуральный дагестанский урбеч с водяной мельницы.</p>
+      <div class="links">
+        <a href="https://wa.me/79882754421" target="_blank" rel="noopener">WhatsApp</a>
+        <a href="#">Telegram</a>
+        <a href="#">Документы</a>
+        <a href="#">Политика конфиденциальности</a>
+      </div>
+      <p class="sm">Контакты: +7 988 275-44-21<br>© 2026 URBAWILD · Сделано в горах Кавказа</p>
+    </footer>
+  </div>
+
+  <!-- ЭКРАН: КАТАЛОГ -->
+  <div class="screen" id="view-catalog">
+    <section class="sec" style="padding-bottom:2px">
+      <div class="sec-h"><div><span class="eyebrow">16 вкусов</span><h2>Каталог</h2></div></div>
+    </section>
+    <div class="grid2" id="cat-grid"></div>
+  </div>
+
+  <!-- ЭКРАН: ТОВАР -->
+  <div class="screen" id="view-product"><div class="pd" id="pd"></div></div>
+
+  <!-- ЭКРАН: КОРЗИНА -->
+  <div class="screen" id="view-cart">
+    <section class="sec"><div class="sec-h"><div><span class="eyebrow">Ваш заказ</span><h2>Корзина</h2></div></div></section>
+    <div id="cart-body" style="padding:0 16px"></div>
+  </div>
+
+  <!-- НИЖНЯЯ НАВИГАЦИЯ -->
+  <nav class="nav">
+    <button data-go="home" class="on" id="nav-home">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M4 11l8-7 8 7v8a1 1 0 0 1-1 1h-4v-6h-6v6H5a1 1 0 0 1-1-1z"/></svg>Главная</button>
+    <button data-go="catalog" id="nav-catalog">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><rect x="4" y="4" width="7" height="7" rx="1.5"/><rect x="13" y="4" width="7" height="7" rx="1.5"/><rect x="4" y="13" width="7" height="7" rx="1.5"/><rect x="13" y="13" width="7" height="7" rx="1.5"/></svg>Каталог</button>
+    <button data-go="cart" id="nav-cart">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8h12l-1 11a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg>Корзина</button>
+  </nav>
+</div>
+
+<!-- ДИЗАЙН-СИСТЕМА -->
+<div class="ds">
+  <h3>Дизайн-система</h3>
+  <div class="lead">Кратко: цвета, шрифты, кнопки, скругления, отступы.</div>
+  <div class="sw">
+    <div style="background:#F6F1E7">Молочный<br>#F6F1E7</div>
+    <div style="background:#1E3B2C;color:#fff">Тёмно-зелёный<br>#1E3B2C</div>
+    <div style="background:#B98A5E;color:#fff">Ореховый<br>#B98A5E</div>
+    <div style="background:#C7A24B;color:#fff">Золото<br>#C7A24B</div>
+  </div>
+  <table>
+    <tr><td>Шрифты</td><td>Заголовки/логотип — Cormorant Garamond SemiBold. Интерфейс, цены, кнопки — Manrope.</td></tr>
+    <tr><td>Кнопки</td><td>Высота 52px (осн.) / 44px (мал.), скругление 16px, крупный текст 15px 800.</td></tr>
+    <tr><td>Скругления</td><td>Карточки 20–24px, изображения/поля 14–18px, чипы 999px.</td></tr>
+    <tr><td>Отступы</td><td>Секции 30px сверху, 16px по бокам; сетка 2 колонки, gap 12px.</td></tr>
+    <tr><td>Тени</td><td>Мягкие: 0 14px 34px rgba(31,45,33,.10). Линии — тонкие #E9E2D3.</td></tr>
+  </table>
+</div>
+
+<script>
+  var P = [
+    {id:"pistachio", n:"Фисташковый", w:"250 г", pr:1490, c:"#6B8C5C", d:"Премиальный и редкий. Ярко-фисташковый вкус.", eat:"С круассаном, в десерты, просто ложкой.", hit:1},
+    {id:"hazelnut-cocoa", n:"Фундук какао-бобы", w:"250 г", pr:799, c:"#4A2810", d:"Честная альтернатива нутелле. Только фундук и какао.", eat:"На хлеб, с блинами, в горячее молоко.", hit:1},
+    {id:"cashew", n:"Кешью", w:"250 г", pr:699, c:"#C9A96E", d:"Самый нежный. Нравится даже детям.", eat:"С фруктами, блинами, в десерты.", hit:1},
+    {id:"peanut", n:"Арахисовый", w:"250 г", pr:379, c:"#B87A3D", d:"Насыщенный вкус обжаренного арахиса. Много белка.", eat:"С тостами, бананом, в кашу и смузи.", hit:1},
+    {id:"almond", n:"Миндальный", w:"250 г", pr:449, c:"#DDB97C", d:"Мягкий, кремовый, самый популярный вкус.", eat:"С тостами, в кашу, в кофе.", hit:1},
+    {id:"almond-cashew", n:"Миндаль с кешью", w:"250 г", pr:549, c:"#D4B084", d:"Два самых нежных ореха в одной банке.", eat:"С тостами, сырниками, фруктами."},
+    {id:"three-nuts", n:"Ассорти три ореха", w:"250 г", pr:549, c:"#A9885C", d:"Миндаль, кешью и арахис — богатый ореховый вкус.", eat:"На хлеб, в кашу, к сырам."},
+    {id:"hazelnut", n:"Фундук", w:"250 г", pr:749, c:"#8A5A2B", d:"Глубокий вкус лесного ореха без добавок.", eat:"С блинами, кофе, в десерты."},
+    {id:"walnut", n:"Грецкий орех", w:"250 г", pr:629, c:"#8B7355", d:"Богат омега-3. Для ума, сердца и энергии.", eat:"С мёдом, в кашу, к сырам."},
+    {id:"flax-black", n:"Чёрный лён", w:"250 г", pr:349, c:"#33302A", d:"Классика здоровья: омега-3 и лёгкая горчинка.", eat:"В кашу, в смузи, с мёдом на хлеб."},
+    {id:"flax-white", n:"Белый лён", w:"250 г", pr:349, c:"#E2D3B3", d:"Нежнее чёрного льна. Мягкий вкус.", eat:"В йогурт, кашу, смузи."},
+    {id:"flax-seeds", n:"Лён с семечками", w:"250 г", pr:379, c:"#4A4136", d:"Лён и подсолнечные семечки — мягче и сытнее.", eat:"На завтрак с тостами, в творог."},
+    {id:"flax-mix", n:"Ассорти со льном", w:"250 г", pr:399, c:"#7A6B4F", d:"Польза семян и вкус орехов в одной банке.", eat:"С хлебом, фруктами, в выпечку."},
+    {id:"sesame", n:"Кунжут", w:"250 г", pr:399, c:"#E8DCC0", d:"Природный кальций и нежная тахини-текстура.", eat:"В соусы, хумус, выпечку, с мёдом."},
+    {id:"hemp", n:"Конопля", w:"250 г", pr:449, c:"#5F7048", d:"Растительный белок и мягкий ореховый вкус.", eat:"В смузи, кашу, спортивное питание."},
+    {id:"thistle", n:"Расторопша", w:"250 г", pr:349, c:"#9C9A6E", d:"Природная поддержка печени. Сила трав Кавказа.", eat:"По ложке утром, в смузи, с мёдом."}
+  ];
+  var byId = {}; P.forEach(function(p){ byId[p.id]=p; });
+  var money = function(v){ return new Intl.NumberFormat("ru-RU").format(v)+" ₽"; };
+  function light(hex){ return ["#E2D3B3","#E8DCC0","#DDB97C","#C9A96E","#D4B084"].indexOf(hex)>=0; }
+  function jar(p, big){
+    var w = big?120:64, h = big?164:88, fs = big?12:9;
+    var col = light(p.c)?"#2A2118":"#F6EBDA";
+    return '<div class="jar" style="background:'+p.c+';width:'+w+'px;height:'+h+'px">'+
+      '<span style="color:'+col+';font-size:'+fs+'px">'+p.n.toUpperCase()+'</span></div>';
+  }
+  function card(p){
+    return '<article class="pcard">'+
+      '<div class="art" data-open="'+p.id+'">'+jar(p)+'</div>'+
+      '<div class="b"><h3>'+p.n+'</h3><span class="w">'+p.w+'</span>'+
+      '<span class="pr">'+money(p.pr)+'</span>'+
+      '<button class="btn btn-green btn-sm add" data-add="'+p.n+' '+p.w+'|'+p.pr+'">В корзину</button></div></article>';
+  }
+  function hcard(p){ return '<div class="hcard">'+card(p)+'</div>'; }
+
+  document.getElementById("hits").innerHTML = P.filter(function(p){return p.hit;}).map(hcard).join("");
+  document.getElementById("home-grid").innerHTML = P.slice(0,4).map(card).join("");
+  document.getElementById("cat-grid").innerHTML = P.map(card).join("");
+
+  // корзина
+  var cart = {};
+  function cartCount(){ var n=0; for(var k in cart) n+=cart[k].q; return n; }
+  function refresh(){ document.getElementById("badge").textContent = cartCount(); }
+  function addToCart(key){
+    var parts=key.split("|"); var name=parts[0], price=+parts[1];
+    if(!cart[key]) cart[key]={n:name,p:price,q:0};
+    cart[key].q++; refresh(); renderCart();
+    var b=document.getElementById("badge"); b.style.transform="scale(1.4)"; setTimeout(function(){b.style.transform="";},150);
+  }
+  function renderCart(){
+    var keys=Object.keys(cart), body=document.getElementById("cart-body");
+    if(!keys.length){ body.innerHTML='<div class="empty"><div class="big">🧺</div><b>Пока пусто</b><p style="margin-top:6px">Выберите вкус в каталоге.</p><button class="btn btn-green" style="margin-top:16px" data-go="catalog">В каталог</button></div>'; return; }
+    var total=0, rows=keys.map(function(k){ var c=cart[k]; total+=c.p*c.q;
+      return '<div class="review" style="display:flex;justify-content:space-between;align-items:center"><div><b>'+c.n+'</b><div class="stars" style="color:var(--muted)">× '+c.q+'</div></div><b style="color:var(--green)">'+money(c.p*c.q)+'</b></div>';
+    }).join("");
+    body.innerHTML = rows + '<div style="display:flex;justify-content:space-between;align-items:center;padding:14px 4px"><b>Итого</b><span class="price">'+money(total)+'</span></div><button class="btn btn-green btn-block">Оформить заказ</button><p style="text-align:center;color:var(--muted);font-size:12px;margin-top:10px">Оплату и доставку подключим на следующем шаге.</p>';
+  }
+  renderCart();
+
+  // навигация
+  function go(v){
+    document.querySelectorAll(".screen").forEach(function(s){ s.classList.remove("active"); });
+    document.getElementById("view-"+v).classList.add("active");
+    ["home","catalog","cart"].forEach(function(n){
+      var el=document.getElementById("nav-"+n); if(el) el.classList.toggle("on", n===v);
+    });
+    document.querySelector(".phone").scrollTop=0; window.scrollTo(0,0);
+  }
+  function openProduct(id){
+    var p=byId[id];
+    document.getElementById("pd").innerHTML =
+      '<div class="art"><div class="back" data-go="catalog">‹</div>'+jar(p,true)+'</div>'+
+      '<div class="pd-b"><h2>'+p.n+'</h2><div class="w">'+p.w+' · натуральный урбеч</div>'+
+      '<div class="sizes"><div class="size on"><b>250 г</b><span>'+money(p.pr)+'</span></div>'+
+      '<div class="size"><b>450 г</b><span>'+money(Math.round(p.pr*1.75))+'</span></div>'+
+      '<div class="size"><b>1 кг</b><span>'+money(Math.round(p.pr*3.4))+'</span></div></div>'+
+      '<div class="pd-price">'+money(p.pr)+'</div>'+
+      '<button class="btn btn-green btn-block add" data-add="'+p.n+' '+p.w+'|'+p.pr+'">Добавить в корзину</button>'+
+      '<div class="block" style="margin-top:14px"><h4>Вкус</h4><p>'+p.d+'</p></div>'+
+      '<div class="block"><h4>Состав</h4><p>100% натуральный урбеч. Без лишних добавок.</p></div>'+
+      '<div class="block"><h4>С чем едят</h4><p>'+p.eat+'</p></div></div>';
+    go("product");
+  }
+
+  document.addEventListener("click", function(e){
+    var g=e.target.closest("[data-go]"); if(g){ go(g.getAttribute("data-go")); return; }
+    var o=e.target.closest("[data-open]"); if(o){ openProduct(o.getAttribute("data-open")); return; }
+    var a=e.target.closest("[data-add]"); if(a){ addToCart(a.getAttribute("data-add")); return; }
+  });
+  refresh();
+</script>
+</body>
+</html>

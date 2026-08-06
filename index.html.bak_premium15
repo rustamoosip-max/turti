@@ -1,0 +1,429 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="URBAWILD — натуральный дагестанский урбеч с водяной мельницы. Медленный каменный помол в горах Дагестана.">
+<title>URBAWILD — настоящий урбеч с водяной мельницы</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{ box-sizing:border-box; margin:0; padding:0; }
+  :root{
+    --milk:#F6F1E7; --paper:#FFFFFF; --green:#1E3B2C; --green2:#2C5240;
+    --nut:#B98A5E; --gold:#C7A24B; --ink:#20261F; --muted:#6E6A5F;
+    --line:#E9E2D3; --shadow:0 14px 34px rgba(31,45,33,.10);
+  }
+  html{ scroll-behavior:smooth; }
+  body{ font-family:'Manrope',sans-serif; color:var(--ink); background:var(--milk);
+    -webkit-font-smoothing:antialiased; line-height:1.5; }
+  h1,h2,h3,.logo-txt{ font-family:'Cormorant Garamond',serif; font-weight:600; }
+  a{ color:inherit; }
+  .app{ max-width:480px; margin:0 auto; background:var(--milk); min-height:100vh; position:relative; overflow-x:hidden; }
+  .screen{ display:none; padding-bottom:96px; }
+  .screen.active{ display:block; }
+
+  .hdr{ position:sticky; top:0; z-index:30; display:flex; align-items:center; justify-content:space-between;
+    padding:12px 16px; background:rgba(246,241,231,.85); -webkit-backdrop-filter:blur(16px); backdrop-filter:blur(16px);
+    border-bottom:1px solid var(--line); }
+  .hdr .ic{ width:40px; height:40px; border-radius:12px; border:1px solid var(--line); background:var(--paper);
+    display:grid; place-items:center; color:var(--green); cursor:pointer; }
+  .hdr .ic svg{ width:20px; height:20px; }
+  .logo{ display:flex; flex-direction:column; align-items:center; line-height:1; text-decoration:none; cursor:pointer; }
+  .logo .logo-txt{ font-size:23px; letter-spacing:.04em; color:var(--green); }
+  .logo small{ font-size:8.5px; letter-spacing:.26em; text-transform:uppercase; color:var(--nut); font-weight:700; margin-top:2px; }
+  .cart-ic{ position:relative; }
+  .badge{ position:absolute; top:-6px; right:-6px; min-width:18px; height:18px; padding:0 4px; background:var(--green);
+    color:#fff; font:800 10px 'Manrope',sans-serif; border-radius:999px; display:grid; place-items:center; }
+
+  .btn{ display:inline-flex; align-items:center; justify-content:center; gap:8px; min-height:52px; padding:14px 26px;
+    border:none; border-radius:16px; cursor:pointer; font:800 15px 'Manrope',sans-serif; text-decoration:none;
+    transition:transform .15s, filter .15s; }
+  .btn:active{ transform:scale(.98); }
+  .btn-green{ background:var(--green); color:#F6F1E7; box-shadow:0 10px 24px rgba(30,59,44,.28); }
+  .btn-green:hover{ filter:brightness(1.08); }
+  .btn-out{ background:transparent; color:var(--green); border:1.5px solid var(--green); }
+  .btn-cream{ background:#F6F1E7; color:var(--green); }
+  .btn-sm{ min-height:44px; padding:10px 16px; font-size:13.5px; border-radius:13px; }
+  .btn-block{ width:100%; }
+
+  .hero{ position:relative; height:66vh; min-height:480px; overflow:hidden; display:flex; align-items:flex-end; }
+  .hero img{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
+  .hero .fallback{ position:absolute; inset:0; background:linear-gradient(160deg,#3C6B4E,#1E3B2C 60%,#132619); }
+  .hero .shade{ position:absolute; inset:0; background:linear-gradient(to top, rgba(12,22,15,.9) 6%, rgba(12,22,15,.4) 48%, rgba(12,22,15,.08)); }
+  .hero-in{ position:relative; z-index:2; padding:0 20px 28px; width:100%; }
+  .hero h1{ color:#FBF7EE; font-size:41px; line-height:1.04; margin-bottom:10px; text-shadow:0 4px 22px rgba(0,0,0,.4); }
+  .hero p{ color:rgba(251,247,238,.92); font-size:15px; font-weight:500; margin-bottom:18px; max-width:300px; }
+  .trust{ display:inline-flex; align-items:center; gap:8px; margin-top:14px; background:rgba(255,255,255,.14);
+    border:1px solid rgba(255,255,255,.25); color:#FBF7EE; font-size:11.5px; font-weight:700; padding:8px 13px;
+    border-radius:999px; -webkit-backdrop-filter:blur(6px); backdrop-filter:blur(6px); }
+
+  .sec{ padding:30px 16px 6px; }
+  .sec-h{ display:flex; align-items:baseline; justify-content:space-between; margin-bottom:14px; }
+  .sec-h h2{ font-size:27px; color:var(--green); }
+  .eyebrow{ display:block; font:700 11px 'Manrope',sans-serif; letter-spacing:.18em; text-transform:uppercase; color:var(--nut); margin-bottom:3px; }
+  .sec-h a{ font:700 13px 'Manrope',sans-serif; color:var(--green); text-decoration:none; white-space:nowrap; cursor:pointer; }
+
+  .jar{ position:relative; width:76px; height:104px; border-radius:9px 9px 13px 13px; flex-shrink:0;
+    box-shadow:inset 0 -14px 24px rgba(0,0,0,.18), 0 8px 16px rgba(30,40,25,.16); }
+  .jar::before{ content:""; position:absolute; top:-7px; left:50%; transform:translateX(-50%); width:64%; height:11px; background:#2A2118; border-radius:4px 4px 3px 3px; }
+  .jar::after{ content:""; position:absolute; top:26%; left:12%; right:12%; bottom:16%; background:rgba(252,249,242,.94); border-radius:7px; }
+  .jar span{ position:absolute; z-index:2; left:0; right:0; top:40%; text-align:center; font:800 9px 'Manrope',sans-serif; letter-spacing:.06em; padding:0 6px; line-height:1.2; }
+
+  .bundle{ background:var(--paper); border:1px solid var(--line); border-radius:24px; overflow:hidden; box-shadow:var(--shadow); }
+  .bundle-top{ position:relative; background:linear-gradient(150deg,#EFE7D5,#E4D6BC); padding:26px 18px 20px; display:flex; align-items:flex-end; justify-content:center; gap:8px; }
+  .bundle-top .jar{ width:66px; height:92px; }
+  .bundle-top .jar:nth-child(3){ transform:translateY(-10px); z-index:2; }
+  .tag{ position:absolute; top:12px; left:14px; background:var(--green); color:#F6F1E7; font:800 11px 'Manrope',sans-serif; padding:6px 11px; border-radius:999px; }
+  .bundle-b{ padding:18px; }
+  .bundle-b h3{ font-size:24px; color:var(--green); margin-bottom:4px; }
+  .bundle-b .fl{ color:var(--muted); font-size:13.5px; font-weight:500; margin-bottom:12px; }
+  .price-row{ display:flex; align-items:baseline; gap:10px; margin-bottom:14px; }
+  .price{ font:800 26px 'Manrope',sans-serif; color:var(--green); letter-spacing:-.02em; }
+  .price-old{ color:#B3AB97; text-decoration:line-through; font-size:15px; font-weight:600; }
+  .price-save{ background:#EAF1EA; color:var(--green2); font:800 11px 'Manrope',sans-serif; padding:4px 10px; border-radius:999px; }
+
+  .hscroll{ display:flex; gap:12px; overflow-x:auto; padding:2px 16px 14px; scroll-snap-type:x mandatory; }
+  .hscroll::-webkit-scrollbar{ display:none; }
+  .hcard{ scroll-snap-align:start; flex:0 0 156px; }
+
+  .pcard{ background:var(--paper); border:1px solid var(--line); border-radius:20px; overflow:hidden; box-shadow:0 8px 20px rgba(31,45,33,.07); display:flex; flex-direction:column; }
+  .pcard .art{ position:relative; height:150px; display:flex; align-items:flex-end; justify-content:center; padding-bottom:16px; background:radial-gradient(120% 90% at 50% 20%, #FBF7EE, #F1EAD9); cursor:pointer; }
+  .pcard .art::after{ content:""; position:absolute; bottom:12px; left:26%; right:26%; height:11px; border-radius:50%; background:rgba(0,0,0,.14); filter:blur(6px); }
+  .pcard .art .jar{ width:64px; height:88px; z-index:2; }
+  .pcard .b{ padding:12px 13px 13px; display:flex; flex-direction:column; gap:2px; flex:1; }
+  .pcard .b h3{ font-family:'Manrope',sans-serif; font-weight:800; font-size:14.5px; color:var(--ink); line-height:1.25; }
+  .pcard .b .w{ font-size:11.5px; color:var(--muted); font-weight:600; }
+  .pcard .b .pr{ font:800 17px 'Manrope',sans-serif; color:var(--green); letter-spacing:-.02em; margin-top:4px; }
+  .pcard .add{ margin-top:10px; }
+  .grid2{ display:grid; grid-template-columns:1fr 1fr; gap:12px; padding:0 16px; }
+
+  .mill{ margin:30px 16px 6px; border-radius:24px; overflow:hidden; position:relative; min-height:300px; display:flex; align-items:flex-end; box-shadow:var(--shadow); }
+  .mill img{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
+  .mill .fallback{ position:absolute; inset:0; background:linear-gradient(160deg,#5A3A1E,#241608); }
+  .mill .shade{ position:absolute; inset:0; background:linear-gradient(to top, rgba(15,25,15,.92) 8%, rgba(15,25,15,.35) 60%); }
+  .mill-in{ position:relative; z-index:2; padding:22px 20px; }
+  .mill-in .eyebrow{ color:var(--gold); }
+  .mill-in h2{ color:#FBF7EE; font-size:28px; line-height:1.1; margin-bottom:8px; }
+  .mill-in p{ color:rgba(251,247,238,.9); font-size:14px; font-weight:500; margin-bottom:16px; max-width:290px; }
+
+  .review{ background:var(--paper); border:1px solid var(--line); border-radius:18px; padding:16px; margin-bottom:12px; box-shadow:0 6px 16px rgba(31,45,33,.05); }
+  .review .top{ display:flex; align-items:center; gap:10px; margin-bottom:8px; }
+  .ava{ width:38px; height:38px; border-radius:50%; background:var(--green); color:#F6F1E7; display:grid; place-items:center; font:800 15px 'Manrope',sans-serif; }
+  .review .top b{ font-size:14px; }
+  .stars{ color:var(--gold); font-size:12px; letter-spacing:2px; }
+  .review p{ font-size:13.5px; color:#4A473E; font-weight:500; line-height:1.55; }
+
+  .info{ background:var(--paper); border:1px solid var(--line); border-radius:18px; padding:16px; }
+  .info .row{ display:flex; gap:12px; padding:10px 0; border-top:1px solid var(--line); }
+  .info .row:first-child{ border-top:none; }
+  .info .row .i{ font-size:20px; }
+  .info .row b{ font-size:14px; display:block; }
+  .info .row span{ font-size:12.5px; color:var(--muted); }
+
+  .foot{ background:var(--green); color:rgba(246,241,231,.85); padding:28px 20px 26px; margin-top:30px; }
+  .foot .logo-txt{ color:#F6F1E7; font-size:24px; }
+  .foot .links{ display:flex; flex-wrap:wrap; gap:10px; margin:14px 0; }
+  .foot .links a{ background:rgba(246,241,231,.12); color:#F6F1E7; text-decoration:none; font:700 12.5px 'Manrope',sans-serif; padding:9px 14px; border-radius:999px; cursor:pointer; }
+  .foot .sm{ font-size:11.5px; color:rgba(246,241,231,.6); line-height:1.7; }
+
+  .nav{ position:fixed; left:50%; transform:translateX(-50%); bottom:0; z-index:40; width:100%; max-width:480px; height:74px;
+    background:rgba(246,241,231,.94); -webkit-backdrop-filter:blur(18px); backdrop-filter:blur(18px); border-top:1px solid var(--line); display:flex; }
+  .nav button{ flex:1; background:none; border:none; cursor:pointer; display:grid; justify-items:center; gap:3px; font:800 10.5px 'Manrope',sans-serif; color:#9A9484; }
+  .nav button svg{ width:24px; height:24px; }
+  .nav button.on{ color:var(--green); }
+
+  .pd .art{ height:300px; background:radial-gradient(120% 80% at 50% 25%, #FBF7EE, #EEE5D2); display:flex; align-items:flex-end; justify-content:center; padding-bottom:26px; position:relative; }
+  .pd .art .jar{ width:120px; height:164px; }
+  .pd .art .back{ position:absolute; top:14px; left:14px; width:40px; height:40px; border-radius:12px; background:rgba(255,255,255,.9); border:1px solid var(--line); display:grid; place-items:center; cursor:pointer; font-size:20px; color:var(--green); }
+  .pd-b{ padding:20px 18px; }
+  .pd-b h2{ font-size:30px; color:var(--green); margin-bottom:4px; }
+  .pd-b .w{ color:var(--muted); font-weight:600; font-size:14px; margin-bottom:14px; }
+  .sizes{ display:flex; gap:8px; margin-bottom:16px; }
+  .size{ flex:1; border:1.5px solid var(--line); background:var(--paper); border-radius:14px; padding:10px 6px; text-align:center; cursor:pointer; }
+  .size.on{ border-color:var(--green); background:#EAF1EA; }
+  .size b{ display:block; font:800 14px 'Manrope',sans-serif; }
+  .size span{ font-size:12px; color:var(--muted); }
+  .pd-price{ font:800 30px 'Manrope',sans-serif; color:var(--green); letter-spacing:-.02em; margin:6px 0 16px; }
+  .block{ background:var(--paper); border:1px solid var(--line); border-radius:16px; padding:14px 16px; margin-bottom:10px; }
+  .block h4{ font:800 11px 'Manrope',sans-serif; letter-spacing:.14em; text-transform:uppercase; color:var(--nut); margin-bottom:6px; }
+  .block p{ font-size:14px; color:#4A473E; font-weight:500; }
+
+  .row-item{ background:var(--paper); border:1px solid var(--line); border-radius:16px; padding:12px 14px; display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; }
+  .row-item .nm{ font-weight:800; font-size:14px; }
+  .row-item .nm small{ display:block; color:var(--muted); font-weight:600; font-size:12px; }
+  .qty{ display:flex; align-items:center; gap:6px; }
+  .qty button{ width:32px; height:32px; border-radius:9px; border:1.5px solid var(--line); background:var(--paper); font:800 17px 'Manrope',sans-serif; color:var(--green); cursor:pointer; }
+  .qty b{ min-width:22px; text-align:center; }
+  .fld{ display:grid; gap:6px; margin-bottom:10px; font:800 13px 'Manrope',sans-serif; color:#3f3a30; }
+  .fld input{ border:1.5px solid var(--line); border-radius:13px; padding:13px 14px; font:500 16px 'Manrope',sans-serif; outline:none; background:var(--paper); }
+  .fld input:focus{ border-color:var(--green); }
+  .empty{ text-align:center; color:var(--muted); padding:60px 20px; }
+  .empty .big{ font-size:40px; margin-bottom:10px; }
+
+  .overlay{ position:fixed; inset:0; z-index:50; background:rgba(20,16,10,.5); opacity:0; visibility:hidden; transition:.25s; }
+  .overlay.show{ opacity:1; visibility:visible; }
+  .sheet{ position:fixed; left:50%; transform:translateX(-50%) translateY(105%); bottom:0; width:100%; max-width:480px; z-index:60;
+    background:var(--milk); border-radius:26px 26px 0 0; padding:18px 18px 30px; transition:transform .3s cubic-bezier(.3,1,.4,1); }
+  .sheet.show{ transform:translateX(-50%); }
+  .grip{ width:44px; height:5px; border-radius:99px; background:#D8CFBC; margin:0 auto 14px; }
+  .menu a{ display:block; background:var(--paper); border:1px solid var(--line); border-radius:14px; padding:15px 16px; font:800 15px 'Manrope',sans-serif; color:var(--ink); text-decoration:none; margin-bottom:8px; cursor:pointer; }
+  .toast{ position:fixed; left:50%; transform:translateX(-50%) translateY(16px); bottom:92px; z-index:80; background:var(--green); color:#F6F1E7; padding:12px 22px; border-radius:999px; font:700 14px 'Manrope',sans-serif; opacity:0; transition:.25s; pointer-events:none; }
+  .toast.show{ opacity:1; transform:translateX(-50%); }
+</style>
+</head>
+<body>
+<div class="app">
+
+  <header class="hdr">
+    <button class="ic" id="menu-btn" aria-label="Меню"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+    <div class="logo" data-go="home"><span class="logo-txt">UrbaWild</span><small>урбеч с водяной мельницы</small></div>
+    <button class="ic cart-ic" data-go="cart" aria-label="Корзина"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8h12l-1 11a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg><span class="badge" id="badge">0</span></button>
+  </header>
+
+  <!-- ГЛАВНАЯ -->
+  <div class="screen active" id="view-home">
+    <section class="hero">
+      <div class="fallback"></div>
+      <img src="images/hero.jpg" alt="Банки урбеча UrbaWild" onerror="this.style.display='none'">
+      <div class="shade"></div>
+      <div class="hero-in">
+        <h1>Настоящий урбеч<br>с водяной мельницы</h1>
+        <p>Медленный каменный помол в горах Дагестана</p>
+        <a class="btn btn-green" data-go="catalog">Выбрать вкус</a>
+        <div><span class="trust">✓ Без перегрева • Только натуральные ингредиенты</span></div>
+      </div>
+    </section>
+
+    <section class="sec">
+      <div class="sec-h"><div><span class="eyebrow">С чего начать</span><h2>Первое знакомство</h2></div></div>
+      <div class="bundle">
+        <div class="bundle-top">
+          <span class="tag">Выгода 137 ₽</span>
+          <div class="jar" style="background:#B87A3D"><span style="color:#F6EBDA">АРАХИС</span></div>
+          <div class="jar" style="background:#DDB97C"><span style="color:#2A2118">МИНДАЛЬ</span></div>
+          <div class="jar" style="background:#4A2810"><span style="color:#F6EBDA">ФУНДУК КАКАО</span></div>
+        </div>
+        <div class="bundle-b">
+          <h3>Набор из трёх вкусов</h3>
+          <div class="fl">Арахисовый · Миндальный · Фундук какао-бобы — по 250 г</div>
+          <div class="price-row"><span class="price">1 490 ₽</span><span class="price-old">1 627 ₽</span><span class="price-save">выгода 137 ₽</span></div>
+          <button class="btn btn-green btn-block" data-add="col-intro">Попробовать набор</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="sec"><div class="sec-h"><div><span class="eyebrow">Выбор покупателей</span><h2>Хиты продаж</h2></div><a data-go="catalog">Все →</a></div></section>
+    <div class="hscroll" id="hits"></div>
+
+    <section class="sec"><div class="sec-h"><div><span class="eyebrow">16 вкусов</span><h2>Все урбечи</h2></div><a data-go="catalog">Каталог →</a></div></section>
+    <div class="grid2" id="home-grid"></div>
+
+    <div class="mill">
+      <div class="fallback"></div>
+      <img src="images/about-hero.jpg" alt="Водяная мельница" onerror="this.style.display='none'">
+      <div class="shade"></div>
+      <div class="mill-in">
+        <span class="eyebrow">Наша история</span>
+        <h2>Медленный каменный помол</h2>
+        <p>Орех перетирают каменные жернова водяной мельницы. Без перегрева — вкус и аромат остаются живыми.</p>
+        <a class="btn btn-cream" href="about.html">Узнать нашу историю</a>
+      </div>
+    </div>
+
+    <section class="sec"><div class="sec-h"><div><span class="eyebrow">Что говорят</span><h2>Отзывы</h2></div></div>
+      <div class="review"><div class="top"><div class="ava">М</div><div><b>Мадина</b><div class="stars">★★★★★</div></div></div><p>Заказываю третий раз. Вкус как в детстве у бабушки. Ребёнок ест с удовольствием!</p></div>
+      <div class="review"><div class="top"><div class="ava">А</div><div><b>Артём</b><div class="stars">★★★★★</div></div></div><p>Честный состав — один орех. Проверил лично. Беру килограммовую банку.</p></div>
+      <div class="review"><div class="top"><div class="ava">О</div><div><b>Ольга</b><div class="stars">★★★★★</div></div></div><p>Добавляю в кашу каждое утро. Качество отличное, доставка быстрая.</p></div>
+    </section>
+
+    <section class="sec"><div class="sec-h"><div><span class="eyebrow">Как получить</span><h2>Доставка и оплата</h2></div></div>
+      <div class="info">
+        <div class="row"><span class="i">📦</span><div><b>Доставка по всей России</b><span>Ozon и СДЭК до пункта выдачи или курьером</span></div></div>
+        <div class="row"><span class="i">💳</span><div><b>Оплата картой или СБП</b><span>Безопасная оплата онлайн при оформлении</span></div></div>
+        <div class="row"><span class="i">🕒</span><div><b>Отправка 1–2 дня</b><span>Собираем и передаём в доставку быстро</span></div></div>
+      </div>
+    </section>
+
+    <footer class="foot">
+      <div class="logo" data-go="home"><span class="logo-txt">UrbaWild</span></div>
+      <p style="margin-top:8px;font-size:13px">Натуральный дагестанский урбеч с водяной мельницы.</p>
+      <div class="links">
+        <a href="https://wa.me/79882754421" target="_blank" rel="noopener">WhatsApp</a>
+        <a href="#" onclick="return false">Telegram</a>
+        <a href="about.html">О нас</a>
+        <a href="#" onclick="return false">Политика конфиденциальности</a>
+      </div>
+      <p class="sm">Контакты: +7 988 275-44-21<br>© 2026 URBAWILD · Сделано в горах Кавказа</p>
+    </footer>
+  </div>
+
+  <!-- КАТАЛОГ -->
+  <div class="screen" id="view-catalog">
+    <section class="sec" style="padding-bottom:2px"><div class="sec-h"><div><span class="eyebrow">16 вкусов</span><h2>Каталог</h2></div></div></section>
+    <div class="grid2" id="cat-grid"></div>
+  </div>
+
+  <!-- ТОВАР -->
+  <div class="screen" id="view-product"><div class="pd" id="pd"></div></div>
+
+  <!-- КОРЗИНА -->
+  <div class="screen" id="view-cart">
+    <section class="sec"><div class="sec-h"><div><span class="eyebrow">Ваш заказ</span><h2>Корзина</h2></div></div></section>
+    <div id="cart-body" style="padding:0 16px"></div>
+  </div>
+
+  <!-- ОФОРМЛЕНИЕ -->
+  <div class="screen" id="view-checkout">
+    <section class="sec"><div class="sec-h"><div><span class="eyebrow">Последний шаг</span><h2>Оформление</h2></div></div></section>
+    <div id="checkout-body" style="padding:0 16px"></div>
+  </div>
+
+  <nav class="nav">
+    <button data-go="home" class="on" id="nav-home"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M4 11l8-7 8 7v8a1 1 0 0 1-1 1h-4v-6h-6v6H5a1 1 0 0 1-1-1z"/></svg>Главная</button>
+    <button data-go="catalog" id="nav-catalog"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><rect x="4" y="4" width="7" height="7" rx="1.5"/><rect x="13" y="4" width="7" height="7" rx="1.5"/><rect x="4" y="13" width="7" height="7" rx="1.5"/><rect x="13" y="13" width="7" height="7" rx="1.5"/></svg>Каталог</button>
+    <button data-go="cart" id="nav-cart"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8h12l-1 11a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg>Корзина</button>
+  </nav>
+
+  <div class="overlay" id="overlay"></div>
+  <div class="sheet" id="menu-sheet">
+    <div class="grip"></div>
+    <div class="menu">
+      <a data-go="home" data-close>🏠 Главная</a>
+      <a data-go="catalog" data-close>🫙 Каталог — 16 вкусов</a>
+      <a href="about.html">🏔 О нас</a>
+      <a href="https://wa.me/79882754421?text=Здравствуйте!%20Интересует%20опт%20URBAWILD" target="_blank" rel="noopener">📦 Опт — от 10 кг</a>
+      <a data-go="cart" data-close>🧺 Корзина</a>
+    </div>
+  </div>
+  <div class="toast" id="toast"></div>
+</div>
+
+<script>
+  var P = {
+    "pistachio":{n:"Фисташковый",c:"#6B8C5C",hit:1,pr:{250:1490,450:2590,1000:5490},d:"Премиальный и редкий. Ярко-фисташковый вкус.",eat:"С круассаном, в десерты, просто ложкой."},
+    "hazelnut-cocoa":{n:"Фундук какао-бобы",c:"#4A2810",hit:1,pr:{250:799,450:1390,1000:2790},d:"Честная альтернатива нутелле. Только фундук и какао.",eat:"На хлеб, с блинами, в горячее молоко."},
+    "cashew":{n:"Кешью",c:"#C9A96E",hit:1,pr:{250:699,450:1199,1000:2390},d:"Самый нежный. Нравится даже детям.",eat:"С фруктами, блинами, в десерты."},
+    "peanut":{n:"Арахисовый",c:"#B87A3D",hit:1,pr:{250:379,450:690,1000:1390},d:"Насыщенный вкус обжаренного арахиса. Много белка.",eat:"С тостами, бананом, в кашу и смузи."},
+    "almond":{n:"Миндальный",c:"#DDB97C",hit:1,pr:{250:449,450:790,1000:1590},d:"Мягкий, кремовый, самый популярный вкус.",eat:"С тостами, в кашу, в кофе."},
+    "almond-cashew":{n:"Миндаль с кешью",c:"#D4B084",pr:{250:549,450:950,1000:1890},d:"Два самых нежных ореха в одной банке.",eat:"С тостами, сырниками, фруктами."},
+    "three-nuts":{n:"Ассорти три ореха",c:"#A9885C",pr:{250:549,450:950,1000:1890},d:"Миндаль, кешью и арахис — богатый ореховый вкус.",eat:"На хлеб, в кашу, к сырам."},
+    "hazelnut":{n:"Фундук",c:"#8A5A2B",pr:{250:749,450:1290,1000:2590},d:"Глубокий вкус лесного ореха без добавок.",eat:"С блинами, кофе, в десерты."},
+    "walnut":{n:"Грецкий орех",c:"#8B7355",pr:{250:629,450:1090,1000:2190},d:"Богат омега-3. Для ума, сердца и энергии.",eat:"С мёдом, в кашу, к сырам."},
+    "flax-black":{n:"Чёрный лён",c:"#33302A",pr:{250:349,450:590,1000:1190},d:"Классика здоровья: омега-3 и лёгкая горчинка.",eat:"В кашу, в смузи, с мёдом на хлеб."},
+    "flax-white":{n:"Белый лён",c:"#E2D3B3",pr:{250:349,450:590,1000:1190},d:"Нежнее чёрного льна. Мягкий вкус.",eat:"В йогурт, кашу, смузи."},
+    "flax-seeds":{n:"Лён с семечками",c:"#4A4136",pr:{250:379,450:650,1000:1290},d:"Лён и подсолнечные семечки — мягче и сытнее.",eat:"На завтрак с тостами, в творог."},
+    "flax-mix":{n:"Ассорти со льном",c:"#7A6B4F",pr:{250:399,450:690,1000:1390},d:"Польза семян и вкус орехов в одной банке.",eat:"С хлебом, фруктами, в выпечку."},
+    "sesame":{n:"Кунжут",c:"#E8DCC0",pr:{250:399,450:690,1000:1390},d:"Природный кальций и нежная тахини-текстура.",eat:"В соусы, хумус, выпечку, с мёдом."},
+    "hemp":{n:"Конопля",c:"#5F7048",pr:{250:449,450:790,1000:1590},d:"Растительный белок и мягкий ореховый вкус.",eat:"В смузи, кашу, спортивное питание."},
+    "thistle":{n:"Расторопша",c:"#9C9A6E",pr:{250:349,450:590,1000:1190},d:"Природная поддержка печени. Сила трав Кавказа.",eat:"По ложке утром, в смузи, с мёдом."}
+  };
+  var IDS = Object.keys(P);
+  var money = function(v){ return new Intl.NumberFormat("ru-RU").format(v)+" ₽"; };
+  var lightC = ["#E2D3B3","#E8DCC0","#DDB97C","#C9A96E","#D4B084"];
+  function jar(id,big){ var p=P[id]; var w=big?120:64,h=big?164:88,fs=big?12:9;
+    var col=lightC.indexOf(p.c)>=0?"#2A2118":"#F6EBDA";
+    return '<div class="jar" style="background:'+p.c+';width:'+w+'px;height:'+h+'px"><span style="color:'+col+';font-size:'+fs+'px">'+p.n.toUpperCase()+'</span></div>'; }
+  function card(id){ var p=P[id]; return '<article class="pcard"><div class="art" data-open="'+id+'">'+jar(id)+'</div>'+
+    '<div class="b"><h3>'+p.n+'</h3><span class="w">250 г</span><span class="pr">'+money(p.pr[250])+'</span>'+
+    '<button class="btn btn-green btn-sm add" data-add="'+id+'|250">В корзину</button></div></article>'; }
+
+  document.getElementById("hits").innerHTML = IDS.filter(function(id){return P[id].hit;}).map(function(id){return '<div class="hcard">'+card(id)+'</div>';}).join("");
+  document.getElementById("home-grid").innerHTML = ["pistachio","hazelnut-cocoa","almond","peanut"].map(card).join("");
+  document.getElementById("cat-grid").innerHTML = IDS.map(card).join("");
+
+  // ── КОРЗИНА (localStorage) ──
+  var CART_KEY="uw_cart";
+  function getCart(){ try{ return JSON.parse(localStorage.getItem(CART_KEY))||{}; }catch(e){ return {}; } }
+  function saveCart(c){ localStorage.setItem(CART_KEY, JSON.stringify(c)); refresh(); }
+  function itemInfo(key){ if(key==="col-intro") return {label:"Набор «Первое знакомство»", sub:"3 банки × 250 г", price:1490};
+    var a=key.split("|"), p=P[a[0]]; return p?{label:p.n, sub:a[1]+" г", price:p.pr[a[1]]}:null; }
+  function addToCart(key){ var c=getCart(); c[key]=(c[key]||0)+1; saveCart(c); toast("Добавлено в корзину ✓"); }
+  function setQty(key,q){ var c=getCart(); if(q<=0) delete c[key]; else c[key]=q; saveCart(c); if(document.getElementById("view-cart").classList.contains("active")) renderCart(); }
+  function lines(){ var c=getCart(); return Object.keys(c).map(function(k){ var i=itemInfo(k); return i?{key:k,q:c[k],label:i.label,sub:i.sub,price:i.price,sum:i.price*c[k]}:null; }).filter(Boolean); }
+  function cartCount(){ return lines().reduce(function(s,l){return s+l.q;},0); }
+  function cartTotal(){ return lines().reduce(function(s,l){return s+l.sum;},0); }
+  function refresh(){ document.getElementById("badge").textContent = cartCount(); }
+
+  function renderCart(){
+    var L=lines(), body=document.getElementById("cart-body");
+    if(!L.length){ body.innerHTML='<div class="empty"><div class="big">🧺</div><b style="font-size:17px">Пока пусто</b><p style="margin-top:6px">Выберите вкус в каталоге.</p><button class="btn btn-green" style="margin-top:16px" data-go="catalog">В каталог</button></div>'; return; }
+    body.innerHTML = L.map(function(l){ return '<div class="row-item"><div class="nm">'+l.label+'<small>'+l.sub+' · '+money(l.price)+'</small></div>'+
+      '<div class="qty"><button data-q="'+l.key+'|-1">−</button><b>'+l.q+'</b><button data-q="'+l.key+'|1">+</button></div></div>'; }).join("")
+      + '<div style="display:flex;justify-content:space-between;align-items:center;padding:14px 4px"><b>Итого</b><span class="price">'+money(cartTotal())+'</span></div>'
+      + '<button class="btn btn-green btn-block" data-go="checkout">Оформить заказ</button>';
+  }
+  function renderCheckout(){
+    var L=lines(), body=document.getElementById("checkout-body");
+    if(!L.length){ body.innerHTML='<div class="empty"><b>Корзина пуста</b><button class="btn btn-green" style="margin-top:16px" data-go="catalog">В каталог</button></div>'; return; }
+    body.innerHTML='<div class="info" style="margin-bottom:14px">'+L.map(function(l){return '<div class="row"><div style="flex:1"><b>'+l.label+' · '+l.sub+' × '+l.q+'</b></div><b>'+money(l.sum)+'</b></div>';}).join("")
+      +'<div class="row"><div style="flex:1"><b>Итого + доставка</b></div><b class="price" style="font-size:20px">'+money(cartTotal())+'</b></div></div>'
+      +'<form id="order-form">'
+      +'<label class="fld">Имя<input name="name" required placeholder="Как к вам обращаться"></label>'
+      +'<label class="fld">Телефон<input name="phone" type="tel" required placeholder="+7 ___ ___-__-__"></label>'
+      +'<label class="fld">Город<input name="city" required placeholder="Например: Махачкала"></label>'
+      +'<label class="fld">Пункт выдачи Ozon / адрес<input name="pvz" required placeholder="Адрес доставки"></label>'
+      +'<button class="btn btn-green btn-block" type="submit">Отправить заказ</button>'
+      +'<p style="text-align:center;color:var(--muted);font-size:12px;margin-top:10px">Оплату и точную доставку подтвердим после заказа.</p></form>';
+    document.getElementById("order-form").addEventListener("submit", function(e){
+      e.preventDefault();
+      var fd=new FormData(e.target), L2=lines(), total=cartTotal();
+      var orders=[]; try{ orders=JSON.parse(localStorage.getItem("urbawild_orders"))||[]; }catch(x){}
+      orders.unshift({ id:Date.now(), date:new Date().toLocaleString("ru-RU"),
+        name:fd.get("name")||"", phone:fd.get("phone")||"", city:fd.get("city")||"", pvz:fd.get("pvz")||"",
+        items:L2.map(function(l){return {label:l.label+" "+l.sub, qty:l.q, sum:l.sum};}),
+        total:total, status:"new", pay:"тест (СБП подключим)" });
+      localStorage.setItem("urbawild_orders", JSON.stringify(orders));
+      var wa="Новый заказ URBAWILD:%0A%0A"+L2.map(function(l){return "• "+l.label+" "+l.sub+" × "+l.q+" — "+money(l.sum);}).join("%0A")
+        +"%0A%0AИтого: "+money(total)+"%0AИмя: "+(fd.get("name")||"")+"%0AТелефон: "+(fd.get("phone")||"")+"%0AГород: "+(fd.get("city")||"")+"%0AПВЗ: "+(fd.get("pvz")||"");
+      saveCart({});
+      document.getElementById("checkout-body").innerHTML='<div class="empty"><div class="big" style="color:var(--green)">✓</div>'
+        +'<b style="font-size:20px;color:var(--green)">Заказ оформлен</b><p style="margin-top:8px">Спасибо! Мы свяжемся с вами для подтверждения и доставки.</p>'
+        +'<a class="btn btn-green btn-block" style="margin-top:16px" target="_blank" rel="noopener" href="https://wa.me/79882754421?text='+wa+'">Продублировать в WhatsApp</a>'
+        +'<button class="btn btn-out btn-block" style="margin-top:10px" data-go="home">На главную</button></div>';
+    });
+  }
+
+  var pmSize=250;
+  function openProduct(id){ var p=P[id]; pmSize=250;
+    document.getElementById("pd").innerHTML =
+      '<div class="art"><div class="back" data-go="catalog">‹</div>'+jar(id,true)+'</div>'+
+      '<div class="pd-b"><h2>'+p.n+'</h2><div class="w">Натуральный дагестанский урбеч</div>'+
+      '<div class="sizes" id="sizes">'+[250,450,1000].map(function(s){return '<div class="size'+(s===250?' on':'')+'" data-size="'+s+'"><b>'+(s===1000?"1 кг":s+" г")+'</b><span>'+money(p.pr[s])+'</span></div>';}).join("")+'</div>'+
+      '<div class="pd-price" id="pd-price">'+money(p.pr[250])+'</div>'+
+      '<button class="btn btn-green btn-block" id="pd-add">Добавить в корзину</button>'+
+      '<div class="block" style="margin-top:14px"><h4>Вкус</h4><p>'+p.d+'</p></div>'+
+      '<div class="block"><h4>Состав</h4><p>100% натуральный урбеч. Без лишних добавок.</p></div>'+
+      '<div class="block"><h4>С чем едят</h4><p>'+p.eat+'</p></div></div>';
+    document.getElementById("sizes").addEventListener("click", function(e){ var b=e.target.closest(".size"); if(!b)return;
+      document.querySelectorAll("#sizes .size").forEach(function(x){x.classList.remove("on");}); b.classList.add("on");
+      pmSize=+b.getAttribute("data-size"); document.getElementById("pd-price").textContent=money(p.pr[pmSize]); });
+    document.getElementById("pd-add").addEventListener("click", function(){ addToCart(id+"|"+pmSize); });
+    go("product");
+  }
+
+  function go(v){ document.querySelectorAll(".screen").forEach(function(s){s.classList.remove("active");});
+    document.getElementById("view-"+v).classList.add("active");
+    ["home","catalog","cart"].forEach(function(n){ var el=document.getElementById("nav-"+n); if(el) el.classList.toggle("on", n===v || (v==="checkout"&&n==="cart")); });
+    if(v==="cart") renderCart(); if(v==="checkout") renderCheckout();
+    window.scrollTo(0,0); }
+
+  function toast(m){ var t=document.getElementById("toast"); t.textContent=m; t.classList.add("show"); clearTimeout(toast._t); toast._t=setTimeout(function(){t.classList.remove("show");},1600); }
+
+  var ov=document.getElementById("overlay"), ms=document.getElementById("menu-sheet");
+  function openMenu(){ ov.classList.add("show"); ms.classList.add("show"); }
+  function closeMenu(){ ov.classList.remove("show"); ms.classList.remove("show"); }
+  document.getElementById("menu-btn").addEventListener("click", openMenu);
+  ov.addEventListener("click", closeMenu);
+
+  document.addEventListener("click", function(e){
+    var g=e.target.closest("[data-go]"); if(g){ if(g.closest(".sheet")) closeMenu(); go(g.getAttribute("data-go")); return; }
+    var o=e.target.closest("[data-open]"); if(o){ openProduct(o.getAttribute("data-open")); return; }
+    var a=e.target.closest("[data-add]"); if(a){ addToCart(a.getAttribute("data-add")); return; }
+    var q=e.target.closest("[data-q]"); if(q){ var pr=q.getAttribute("data-q").split("|"), d=+pr.pop(), k=pr.join("|"); setQty(k,(getCart()[k]||0)+d); return; }
+  });
+  refresh();
+</script>
+</body>
+</html>
