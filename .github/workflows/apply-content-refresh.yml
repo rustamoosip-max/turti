@@ -2,7 +2,8 @@ name: Apply TURTI content refresh
 
 on:
   push:
-    branches: [content-refresh-safe3]
+    branches:
+      - content-refresh-safe3
 
 permissions:
   contents: write
@@ -11,135 +12,22 @@ jobs:
   refresh:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout safe branch
+        uses: actions/checkout@v4
         with:
           ref: content-refresh-safe3
-      - name: Apply requested catalog and brand text changes
-        shell: python
-        run: |
-          from pathlib import Path
 
-          idx = Path('index.html')
-          text = idx.read_text(encoding='utf-8')
+      - name: Apply requested changes
+        run: python3 scripts/apply_content_refresh.py
 
-          # Visible catalog: 12 current flavors. Keep old product records internally so old carts/code do not break.
-          text = text.replace('16 вкусов, доставка по России.', '12 вкусов, доставка по России.')
-          text = text.replace('16 вкусов.</p>', '12 вкусов.</p>')
-          text = text.replace('Все урбечи · 16 вкусов →', 'Все урбечи · 12 вкусов →')
-          text = text.replace('<span class="eyebrow">16 вкусов</span>', '<span class="eyebrow">12 вкусов</span>')
-
-          # Rename the product exactly as requested.
-          text = text.replace('Ассорти три ореха', 'Три ореха')
-
-          # Remove unavailable flavors from all visible customer-facing lists.
-          old_hits = 'const HITS = ["hazelnut-cocoa", "almond", "peanut", "pistachio", "cashew"];'
-          new_hits = 'const HITS = ["hazelnut-cocoa", "almond", "peanut", "cashew"];\n    const HIDDEN_PRODUCTS = new Set(["flax-seeds", "thistle", "pistachio", "walnut"]);\n    const ACTIVE_COLLECTION_IDS = new Set(["col-intro", "col-nuts"]);'
-          if old_hits in text:
-              text = text.replace(old_hits, new_hits)
-          elif 'const HIDDEN_PRODUCTS' not in text:
-              raise SystemExit('HITS anchor not found — stop instead of risking the site')
-
-          text = text.replace(
-              'const CAT_NUTS = ["hazelnut-cocoa","pistachio","almond","cashew","peanut","hazelnut","walnut","almond-cashew","three-nuts"];',
-              'const CAT_NUTS = ["hazelnut-cocoa","almond","cashew","peanut","hazelnut","almond-cashew","three-nuts"];'
-          )
-          text = text.replace(
-              'const CAT_SEEDS = ["sesame","hemp","flax-black","flax-white","flax-seeds","flax-mix","thistle"];',
-              'const CAT_SEEDS = ["sesame","hemp","flax-black","flax-white","flax-mix"];'
-          )
-
-          # Hide sets that still contain flavors removed from sale. We do not invent new set prices without Rustam.
-          text = text.replace(
-              'Object.entries(COLLECTIONS).map(([cid, c]) => `',
-              'Object.entries(COLLECTIONS).filter(([cid]) => ACTIVE_COLLECTION_IDS.has(cid)).map(([cid, c]) => `'
-          )
-
-          # Similar products, wholesale selector and search must also exclude hidden flavors.
-          text = text.replace(
-              'Object.keys(PRODUCTS).filter(x => x !== id && PRODUCTS[x].group === p.group).slice(0, 3);',
-              'Object.keys(PRODUCTS).filter(x => x !== id && !HIDDEN_PRODUCTS.has(x) && PRODUCTS[x].group === p.group).slice(0, 3);'
-          )
-          text = text.replace(
-              '${Object.keys(PRODUCTS).map(id => `',
-              '${Object.keys(PRODUCTS).filter(id => !HIDDEN_PRODUCTS.has(id)).map(id => `'
-          )
-          text = text.replace(
-              'const found = Object.keys(PRODUCTS).filter(id =>\n        !query || PRODUCTS[id].name.toLowerCase().includes(query) || PRODUCTS[id].ing.toLowerCase().includes(query)\n      );',
-              'const found = Object.keys(PRODUCTS).filter(id => !HIDDEN_PRODUCTS.has(id)).filter(id =>\n        !query || PRODUCTS[id].name.toLowerCase().includes(query) || PRODUCTS[id].ing.toLowerCase().includes(query)\n      );'
-          )
-          text = text.replace('«миндаль», «лён», «фисташка»', '«миндаль», «лён», «кешью»')
-
-          # Clean old browser carts so removed standalone flavors do not remain visible after the update.
-          old_get_cart = 'function getCart() { try { return JSON.parse(localStorage.getItem(CART_KEY)) || {}; } catch (e) { return {}; } }'
-          new_get_cart = '''function getCart() {
-      try {
-        const c = JSON.parse(localStorage.getItem(CART_KEY)) || {};
-        Object.keys(c).forEach(k => {
-          if (k.startsWith("col-") && !ACTIVE_COLLECTION_IDS.has(k)) delete c[k];
-          else if (!k.startsWith("col-") && HIDDEN_PRODUCTS.has(k.split("|")[0])) delete c[k];
-        });
-        return c;
-      } catch (e) { return {}; }
-    }'''
-          if old_get_cart in text:
-              text = text.replace(old_get_cart, new_get_cart)
-
-          # Brand history: use 25+ years consistently and remove any old 40-year wording if present.
-          for old, new in [
-              ('40 лет', '25+ лет'),
-              ('40+ лет', '25+ лет'),
-              ('сорока лет', '25 лет'),
-              ('Сорока лет', '25 лет'),
-          ]:
-              text = text.replace(old, new)
-
-          text = text.replace(
-              '<div><strong>Камень</strong><span>ручной помол</span></div>',
-              '<div><strong>25+</strong><span>лет опыта</span></div>'
-          )
-          old_story = 'Высоко в горах Дагестана стоит наша мельница. Больше века горная река вращает каменные жернова — медленно, без нагрева, перетирая орех в живую пасту.'
-          new_story = 'Уже более 25 лет мы занимаемся урбечом в Дагестане. Высоко в горах стоит наша мельница, где горная река вращает каменные жернова — медленно, без нагрева, перетирая орех в живую пасту.'
-          text = text.replace(old_story, new_story)
-
-          # Safety assertions: if these fail, workflow stops and does not commit a damaged page.
-          checks = [
-              'const HIDDEN_PRODUCTS = new Set(["flax-seeds", "thistle", "pistachio", "walnut"]);',
-              'name: "Три ореха"',
-              'Все урбечи · 12 вкусов →',
-              '<strong>25+</strong><span>лет опыта</span>',
-          ]
-          missing = [x for x in checks if x not in text]
-          if missing:
-              raise SystemExit('Safety check failed: ' + repr(missing))
-
-          idx.write_text(text, encoding='utf-8')
-
-          # Separate About page — same 25+ positioning.
-          about = Path('about.html')
-          if about.exists():
-              a = about.read_text(encoding='utf-8')
-              for old, new in [('40 лет','25+ лет'),('40+ лет','25+ лет'),('сорока лет','25 лет'),('25 лет производства','25+ лет производства')]:
-                  a = a.replace(old, new)
-              about.write_text(a, encoding='utf-8')
-
-          # Server-side catalog: renamed flavor and hidden standalone items cannot be forged into checkout.
-          cat = Path('lib/catalog.js')
-          if cat.exists():
-              c = cat.read_text(encoding='utf-8').replace('Ассорти три ореха', 'Три ореха')
-              if 'const HIDDEN_PRODUCT_IDS' not in c:
-                  anchor = 'export const COLLECTIONS = {'
-                  c = c.replace(anchor, 'const HIDDEN_PRODUCT_IDS = new Set(["flax-seeds", "thistle", "pistachio", "walnut"]);\n\n' + anchor)
-              c = c.replace('const p = PRODUCTS[id];', 'if (HIDDEN_PRODUCT_IDS.has(id)) throw new Error("PRODUCT_NOT_AVAILABLE");\n      const p = PRODUCTS[id];')
-              cat.write_text(c, encoding='utf-8')
-
-      - name: Verify no accidental destructive changes
+      - name: Verify changes
         run: |
           git diff --check
           grep -q 'Все урбечи · 12 вкусов' index.html
           grep -q '25+' index.html
           grep -q 'name: "Три ореха"' index.html
 
-      - name: Commit refresh
+      - name: Commit safe refresh
         run: |
           git config user.name "TURTI content bot"
           git config user.email "actions@users.noreply.github.com"
