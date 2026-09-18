@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>URBAWILD — премиальный макет (мобильный)</title>
+<title>TURTI — премиальный макет (мобильный)</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -139,7 +139,7 @@
   .pcard .add{ margin-top:10px; }
   .grid2{ display:grid; grid-template-columns:1fr 1fr; gap:12px; padding:0 16px; }
 
-  /* блок мельницы */
+  /* блок производства */
   .mill{ margin:30px 16px 6px; border-radius:24px; overflow:hidden; position:relative; min-height:300px;
     display:flex; align-items:flex-end; box-shadow:var(--shadow); }
   .mill img{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
@@ -226,7 +226,7 @@
 </head>
 <body>
 
-<div class="capt">URBAWILD · мобильный макет 390px — переключай экраны внизу</div>
+<div class="capt">TURTI · мобильный макет 390px — переключай экраны внизу</div>
 
 <div class="phone">
 
@@ -235,7 +235,7 @@
     <button class="ic" aria-label="Меню">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
     </button>
-    <div class="logo"><span class="logo-txt">UrbaWild</span><small>урбеч с водяной мельницы</small></div>
+    <div class="logo"><img src="images/turti-avatar.png" alt="TURTI" style="width:46px;height:46px;border-radius:14px;object-fit:cover"><small>натуральный урбеч</small></div>
     <button class="ic cart-ic" data-go="cart" aria-label="Корзина">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8h12l-1 11a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg>
       <span class="badge" id="badge">0</span>
@@ -247,10 +247,10 @@
     <!-- HERO -->
     <section class="hero">
       <div class="fallback"></div>
-      <img src="images/hero.jpg" alt="Банки урбеча UrbaWild" onerror="this.style.display='none'">
+      <img src="images/hero.jpg" alt="Банки урбеча TURTI" onerror="this.style.display='none'">
       <div class="shade"></div>
       <div class="hero-in">
-        <h1>Настоящий урбеч<br>с водяной мельницы</h1>
+        <h1>Натуральный урбеч<br>из Дагестана</h1>
         <p>Медленный каменный помол в горах Дагестана</p>
         <a class="btn btn-green" data-go="catalog">Выбрать вкус</a>
         <div><span class="trust">✓ Без перегрева • Только натуральные ингредиенты</span></div>
@@ -265,11 +265,11 @@
           <span class="tag">Выгода 137 ₽</span>
           <div class="jar" style="background:#B87A3D"><span>АРАХИС</span></div>
           <div class="jar" style="background:#DDB97C"><span>МИНДАЛЬ</span></div>
-          <div class="jar" style="background:#4A2810"><span style="color:#F6EBDA">ФУНДУК КАКАО</span></div>
+          <div class="jar" style="background:#C9A96E"><span style="color:#F6EBDA">КЕШЬЮ</span></div>
         </div>
         <div class="bundle-b">
           <h3>Набор из трёх вкусов</h3>
-          <div class="fl">Арахисовый · Миндальный · Фундук какао-бобы — по 250 г</div>
+          <div class="fl">Арахисовый · Миндальный · Кешью — по 250 г</div>
           <div class="price-row">
             <span class="price">1 490 ₽</span>
             <span class="price-old">1 627 ₽</span>
@@ -292,15 +292,15 @@
     </section>
     <div class="grid2" id="home-grid"></div>
 
-    <!-- МЕЛЬНИЦА -->
+    <!-- О ПРОИЗВОДСТВЕ -->
     <div class="mill">
       <div class="fallback"></div>
-      <img src="images/about-hero.jpg" alt="Водяная мельница" onerror="this.style.display='none'">
+      <img src="images/about-hero.jpg" alt="Производство TURTI" onerror="this.style.display='none'">
       <div class="shade"></div>
       <div class="mill-in">
         <span class="eyebrow">Наша история</span>
         <h2>Медленный каменный помол</h2>
-        <p>Орех перетирают каменные жернова водяной мельницы. Без перегрева — вкус и аромат остаются живыми.</p>
+        <p>Орехи и семена перетираются каменными жерновами до густой ароматной пасты.</p>
         <a class="btn btn-cream" href="about.html">Узнать нашу историю</a>
       </div>
     </div>
@@ -325,15 +325,15 @@
 
     <!-- ПОДВАЛ -->
     <footer class="foot">
-      <div class="logo"><span class="logo-txt">UrbaWild</span></div>
-      <p style="margin-top:8px;font-size:13px">Натуральный дагестанский урбеч с водяной мельницы.</p>
+      <div class="logo"><span class="logo-txt">TURTI</span></div>
+      <p style="margin-top:8px;font-size:13px">Натуральный дагестанский урбеч без добавленного сахара, масел и консервантов.</p>
       <div class="links">
-        <a href="https://wa.me/79882754421" target="_blank" rel="noopener">WhatsApp</a>
+        <a href="https://wa.me/79282197962" target="_blank" rel="noopener">WhatsApp</a>
         <a href="#">Telegram</a>
         <a href="#">Документы</a>
         <a href="#">Политика конфиденциальности</a>
       </div>
-      <p class="sm">Контакты: +7 988 275-44-21<br>© 2026 URBAWILD · Сделано в горах Кавказа</p>
+      <p class="sm">Контакты: +7 928 219-79-62<br>© 2026 TURTI · Сделано в горах Кавказа</p>
     </footer>
   </div>
 
@@ -387,13 +387,11 @@
 <script>
   var P = [
     {id:"pistachio", n:"Фисташковый", w:"250 г", pr:1490, c:"#6B8C5C", d:"Премиальный и редкий. Ярко-фисташковый вкус.", eat:"С круассаном, в десерты, просто ложкой.", hit:1},
-    {id:"hazelnut-cocoa", n:"Фундук какао-бобы", w:"250 г", pr:799, c:"#4A2810", d:"Честная альтернатива нутелле. Только фундук и какао.", eat:"На хлеб, с блинами, в горячее молоко.", hit:1},
     {id:"cashew", n:"Кешью", w:"250 г", pr:699, c:"#C9A96E", d:"Самый нежный. Нравится даже детям.", eat:"С фруктами, блинами, в десерты.", hit:1},
     {id:"peanut", n:"Арахисовый", w:"250 г", pr:379, c:"#B87A3D", d:"Насыщенный вкус обжаренного арахиса. Много белка.", eat:"С тостами, бананом, в кашу и смузи.", hit:1},
+    {id:"pumpkin", n:"Тыквенный", w:"250 г", pr:449, c:"#6F7F3F", d:"Густой урбеч из семян тыквы с мягкой ореховой нотой.", eat:"С тостами, кашей, овощами или в соусы."},
     {id:"almond", n:"Миндальный", w:"250 г", pr:449, c:"#DDB97C", d:"Мягкий, кремовый, самый популярный вкус.", eat:"С тостами, в кашу, в кофе.", hit:1},
     {id:"almond-cashew", n:"Миндаль с кешью", w:"250 г", pr:549, c:"#D4B084", d:"Два самых нежных ореха в одной банке.", eat:"С тостами, сырниками, фруктами."},
-    {id:"three-nuts", n:"Ассорти три ореха", w:"250 г", pr:549, c:"#A9885C", d:"Миндаль, кешью и арахис — богатый ореховый вкус.", eat:"На хлеб, в кашу, к сырам."},
-    {id:"hazelnut", n:"Фундук", w:"250 г", pr:749, c:"#8A5A2B", d:"Глубокий вкус лесного ореха без добавок.", eat:"С блинами, кофе, в десерты."},
     {id:"walnut", n:"Грецкий орех", w:"250 г", pr:629, c:"#8B7355", d:"Богат омега-3. Для ума, сердца и энергии.", eat:"С мёдом, в кашу, к сырам."},
     {id:"flax-black", n:"Чёрный лён", w:"250 г", pr:349, c:"#33302A", d:"Классика здоровья: омега-3 и лёгкая горчинка.", eat:"В кашу, в смузи, с мёдом на хлеб."},
     {id:"flax-white", n:"Белый лён", w:"250 г", pr:349, c:"#E2D3B3", d:"Нежнее чёрного льна. Мягкий вкус.", eat:"В йогурт, кашу, смузи."},
