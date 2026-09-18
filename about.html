@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="TURTI — натуральный урбеч с гор Кавказа. Каменный помол на водяной мельнице, живой вкус ореха.">
   <title>О нас — TURTI</title>
+  <link rel="icon" type="image/png" href="images/turti-avatar.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800&family=Prata&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet">
@@ -70,12 +71,14 @@
     @media(min-width:720px){
       .cards{ grid-template-columns:repeat(3,1fr); }
     }
+      .brand .mk{overflow:hidden;background:none}
+    .brand .mk img{width:100%;height:100%;object-fit:cover;display:block}
   </style>
 </head>
 <body>
 
   <header class="topbar">
-    <a class="brand" href="index.html"><span class="mk">U</span><b>TURTI</b></a>
+    <a class="brand" href="index.html"><span class="mk"><img src="images/turti-avatar.png" alt=""></span><b>TURTI</b></a>
     <a class="back" href="index.html">← В магазин</a>
   </header>
 
@@ -130,7 +133,7 @@
   </div></section>
 
   <footer>
-    <a class="brand" href="index.html"><span class="mk">U</span><b>TURTI</b></a>
+    <a class="brand" href="index.html"><span class="mk"><img src="images/turti-avatar.png" alt=""></span><b>TURTI</b></a>
     <p>Натуральный урбеч с гор Кавказа · Дагестан</p>
   </footer>
 
